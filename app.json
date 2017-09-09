@@ -1,0 +1,8 @@
+{
+    "expo": {
+        "name": "Happy Finder",
+        "slug": "happy-finder",
+        "sdkVersion": "20.0.0",
+        "privacy": "unlisted"
+    }
+}

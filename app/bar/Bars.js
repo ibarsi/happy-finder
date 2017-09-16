@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { List } from 'react-native-elements';
 
 import { getBarsByLocation } from './bars.service';
@@ -23,10 +24,12 @@ export default class Bars extends React.Component {
     }
 
     render() {
-        return <List>
-            {
-                this.state.bars.map((bar, index) => <BarListItem bar={ bar } key={ index } />)
-            }
-        </List>;
+        return <View>
+            <List>
+                {
+                    this.state.bars.map((bar, index) => <BarListItem bar={ bar } key={ index } />)
+                }
+            </List>
+        </View>;
     }
 }

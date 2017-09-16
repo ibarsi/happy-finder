@@ -1,0 +1,18 @@
+[
+    {
+        "name": "\"Proper Pub\"",
+        "type": "bar",
+        "address": "548 King St W, Toronto, ON M5V 1M3",
+        "image": "https://lh5.googleusercontent.com/p/AF1QipNcoxjBNG3Q2m8V00hrutr0EfLjs05KdFN0RuqD=w408-h272-k-no",
+        "rating": 1.2,
+        "distance": 2.3
+    },
+    {
+        "name": "Awesome Restaurant",
+        "type": "restaurant",
+        "address": "587 King St W, Toronto, ON M5V 1M5",
+        "image": "https://lh5.googleusercontent.com/p/AF1QipOG3P4qwrPXdLxjVUc4j0O5Ln1FNaxvsBYSqa2c=w408-h229-k-no",
+        "rating": 4.9,
+        "distance": 0.2
+    }
+]

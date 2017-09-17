@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
+import Text from '../components/Text';
 import { COLOURS } from '../styles';
 
 const ICONS = {
@@ -22,7 +23,7 @@ const BarListItem = ({ bar }) => {
 
     return <ListItem
         title={
-            <Text style={ styles.title }>
+            <Text>
                 { bar.name }
             </Text>
         }
@@ -31,16 +32,14 @@ const BarListItem = ({ bar }) => {
                 { distance }
             </Text>
         }
+        fontFamily={ 'Oswald' }
         leftIcon={ icon }
         chevronColor={ COLOURS.text } />;
 };
 
 const styles = StyleSheet.create({
-    title: {
-        color: COLOURS.text
-    },
     subTitle: {
-        fontWeight: 'bold',
+        fontFamily: 'Oswald-Bold',
         fontSize: 10
     }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 import Text from '../components/Text';
@@ -21,6 +21,19 @@ const BarListItem = ({ bar }) => {
 
     const distance = `${ bar.distance }km`;
 
+    const dealsSorted = (bar.deals || []).sort((a, b) => a.price - b.price);
+
+    const priceLow = (dealsSorted[ 0 ] || {}).price;
+    const priceHigh = (dealsSorted[ dealsSorted.length - 1 ] || {}).price;
+    const priceRange = priceHigh === priceLow ? `$${ priceHigh }` : `$${ priceLow } - $${ priceHigh }`;
+
+    const totalDeals = dealsSorted.length;
+
+    const badge = {
+        value: totalDeals,
+        containerStyle: styles.badge
+    };
+
     return <ListItem
         title={
             <Text>
@@ -28,19 +41,43 @@ const BarListItem = ({ bar }) => {
             </Text>
         }
         subtitle={
-            <Text style={ styles.subTitle }>
-                { distance }
-            </Text>
+            <View style={ styles.container }>
+                <Text style={ [ styles.text, styles.priceRange ] }>
+                    { priceRange }
+                </Text>
+                <Text style={ [ styles.text, styles.divider ] }>
+                    |
+                </Text>
+                <Text style={ styles.text }>
+                    { distance }
+                </Text>
+            </View>
         }
         fontFamily={ 'Oswald' }
         leftIcon={ icon }
-        chevronColor={ COLOURS.text } />;
+        chevronColor={ COLOURS.text }
+        badge={ badge } />;
 };
 
 const styles = StyleSheet.create({
-    subTitle: {
-        fontFamily: 'Oswald-Bold',
-        fontSize: 10
+    container: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        flexDirection: 'row'
+    },
+    text: {
+        fontSize: 12
+    },
+    priceRange: {
+        fontFamily: 'Oswald-Bold'
+    },
+    divider: {
+        paddingLeft: 5,
+        paddingRight: 5
+    },
+    badge: {
+        marginTop: 7,
+        backgroundColor: COLOURS.text
     }
 });
 

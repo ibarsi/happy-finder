@@ -2,21 +2,21 @@ import React from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import { List } from 'react-native-elements';
 
-import { getBarsByLocation } from './bars.service';
-import BarListItem from './BarListItem';
+import { getEstablishmentsByLocation } from './establishments.service';
+import EstablishmentListItem from './EstablishmentListItem';
 
-const getLocations = async() => {
-    const bars = await getBarsByLocation();
+const getEstablishments = async() => {
+    const establishments = await getEstablishmentsByLocation();
 
-    return bars.sort((a, b) => a.distance - b.distance);
+    return establishments.sort((a, b) => a.distance - b.distance);
 };
 
-export default class Bars extends React.Component {
+export default class Establishments extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            bars: [],
+            establishments: [],
             refreshing: false
         };
 
@@ -25,13 +25,13 @@ export default class Bars extends React.Component {
 
     async componentWillMount() {
         this.setState({
-            bars: await getLocations()
+            establishments: await getEstablishments()
         });
     }
 
     async _onRefresh() {
         this.setState({
-            bars: await getLocations()
+            establishments: await getEstablishments()
         });
     }
 
@@ -45,7 +45,8 @@ export default class Bars extends React.Component {
             }>
             <List>
                 {
-                    this.state.bars.map((bar, index) => <BarListItem bar={ bar } key={ index } />)
+                    this.state.establishments.map((establishment, index) =>
+                        <EstablishmentListItem establishment={ establishment } key={ index } />)
                 }
             </List>
         </ScrollView>;

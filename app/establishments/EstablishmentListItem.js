@@ -10,18 +10,18 @@ const ICONS = {
     restaurant: 'md-restaurant'
 };
 
-const BarListItem = ({ bar }) => {
-    if (!bar) { return null; }
+const EstablishmentListItem = ({ establishment }) => {
+    if (!establishment) { return null; }
 
     const icon = {
         type: 'ionicon',
         color: COLOURS.text,
-        name: ICONS[ bar.type ]
+        name: ICONS[ establishment.type ]
     };
 
-    const distance = `${ bar.distance }km`;
+    const distance = `${ establishment.distance }km`;
 
-    const dealsSorted = (bar.deals || []).sort((a, b) => a.price - b.price);
+    const dealsSorted = (establishment.deals || []).sort((a, b) => a.price - b.price);
 
     const priceLow = (dealsSorted[ 0 ] || {}).price;
     const priceHigh = (dealsSorted[ dealsSorted.length - 1 ] || {}).price;
@@ -37,7 +37,7 @@ const BarListItem = ({ bar }) => {
     return <ListItem
         title={
             <Text>
-                { bar.name }
+                { establishment.name }
             </Text>
         }
         subtitle={
@@ -81,4 +81,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default BarListItem;
+export default EstablishmentListItem;

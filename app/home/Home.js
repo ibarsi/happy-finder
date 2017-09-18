@@ -44,7 +44,7 @@ export default class Home extends React.Component {
 
             <Button
                 title={ 'LET\'S GET DRUNK!' }
-                onPress={ () => navigate('Bars') }
+                onPress={ () => navigate('Establishments') }
                 buttonStyle={ styles.button } />
         </View>;
     }

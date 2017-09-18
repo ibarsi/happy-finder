@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation';
 
-import Bars from './app/bar/Bars';
+import Establishments from './app/establishments/Establishments';
 import Home from './app/home/Home';
 
 const App = StackNavigator({
@@ -11,10 +11,10 @@ const App = StackNavigator({
             header: null
         }
     },
-    Bars: {
-        screen: Bars,
+    Establishments: {
+        screen: Establishments,
         navigationOptions: {
-            title: 'Bars'
+            title: 'Establishments'
         }
     }
 });

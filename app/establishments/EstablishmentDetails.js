@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
+import moment from 'moment';
 
 import Text from '../components/Text';
 import { COLOURS } from '../styles';
@@ -28,55 +29,64 @@ export default class EstablishmentDetails extends React.Component {
 
         if (!establishment) { return null; }
 
-        return <View>
+        const now = moment();
+
+        return <ScrollView>
             {
-                establishment.deals.map((deal, index) =>
-                    <Card
-                        key={ index }
-                        title={ `$${ deal.price }` }
-                        titleStyle={ styles.dealTitle }
-                        containerStyle={ styles.card }>
-                        { deal.description &&
-                            <Text style={ styles.dealDescription }>
-                                { deal.description }
-                            </Text>
-                        }
+                establishment.deals
+                    .sort((a, b) => moment.utc(moment(b.endTime, 'HH:mm aa').diff(moment(a.endTime, 'HH:mm aa'))))
+                    .map((deal, index) => {
+                        const cardStyles = [ styles.card ].concat(
+                            moment(deal.endTime, 'HH:mm aa').isBefore(now) ? [ styles.disabled ] : []
+                        );
 
-                        { deal.startTime && deal.endTime &&
-                            <View style={ styles.dealContainer }>
-                                <Text>
-                                    { deal.startTime }
+                        return <Card
+                            key={ index }
+                            title={ `$${ deal.price }` }
+                            titleStyle={ styles.dealTitle }
+                            containerStyle={ cardStyles }>
+                            { deal.description &&
+                                <Text style={ styles.dealDescription }>
+                                    { deal.description }
                                 </Text>
-                                <Text>
-                                    -
-                                </Text>
-                                <Text>
-                                    { deal.endTime }
-                                </Text>
-                            </View>
-                        }
+                            }
 
-                        { deal.items &&
-                            deal.items.map((item, itemIndex) =>
-                                <ListItem
-                                    key={ itemIndex }
-                                    title={
-                                        <Text>
-                                            { item.name }
-                                        </Text>
-                                    }
-                                    leftIcon={
-                                        {
-                                            type: 'ionicon',
-                                            color: COLOURS.text,
-                                            name: ICONS[ item.type ]
+                            { deal.startTime && deal.endTime &&
+                                <View style={ styles.dealContainer }>
+                                    <Text>
+                                        { deal.startTime }
+                                    </Text>
+                                    <Text>
+                                        -
+                                    </Text>
+                                    <Text>
+                                        { deal.endTime }
+                                    </Text>
+                                </View>
+                            }
+
+                            { deal.items &&
+                                deal.items.map((item, itemIndex) =>
+                                    <ListItem
+                                        key={ itemIndex }
+                                        title={
+                                            <Text>
+                                                { item.name }
+                                            </Text>
                                         }
-                                    }
-                                    hideChevron={ true } />)
-                        }
-                    </Card>)
+                                        leftIcon={
+                                            {
+                                                type: 'ionicon',
+                                                color: COLOURS.text,
+                                                name: ICONS[ item.type ]
+                                            }
+                                        }
+                                        hideChevron={ true } />)
+                            }
+                        </Card>;
+                    })
             }
-        </View>;
+        </ScrollView>;
     }
 }
 
@@ -84,6 +94,9 @@ const styles = StyleSheet.create({
     card: {
         padding: 0,
         paddingTop: 10
+    },
+    disabled: {
+        opacity: 0.4
     },
     dealContainer: {
         alignItems: 'center',

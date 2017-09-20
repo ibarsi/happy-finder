@@ -21,8 +21,32 @@
             {
                 "price": 4,
                 "description": "Pints of Goose Island for $4!",
+                "startTime": "2:00PM",
+                "endTime": "8:00PM",
+                "items": [
+                    {
+                        "type": "drink",
+                        "name": "Goose Island IPA Pint"
+                    }
+                ]
+            },
+            {
+                "price": 12,
+                "description": "Buy a pitcher of Pabst for $12!",
                 "startTime": "3:00PM",
-                "endTime": "6:00PM",
+                "endTime": "6:00AM",
+                "items": [
+                    {
+                        "type": "drink",
+                        "name": "Pabst Pitcher"
+                    }
+                ]
+            },
+            {
+                "price": 4,
+                "description": "Pints of Goose Island for $4!",
+                "startTime": "2:00PM",
+                "endTime": "3:00PM",
                 "items": [
                     {
                         "type": "drink",

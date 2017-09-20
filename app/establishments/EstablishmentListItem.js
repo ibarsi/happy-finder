@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 import Text from '../components/Text';
-import { COLOURS } from '../styles';
+import { COLOURS } from '../styles/consts';
 
 const ICONS = {
     bar: 'md-beer',

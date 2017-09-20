@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
-import moment from 'moment';
 
+import { isDealExpired, sortDealsByEndDate } from './establishments.utils';
 import Text from '../components/Text';
-import { COLOURS } from '../styles';
+import baseStyles from '../styles/base.stylesheet';
+import { COLOURS } from '../styles/consts';
 
 const ICONS = {
     drink: 'md-beer',
@@ -29,16 +30,13 @@ export default class EstablishmentDetails extends React.Component {
 
         if (!establishment) { return null; }
 
-        const now = moment();
-
         return <ScrollView>
             {
                 establishment.deals
-                    .sort((a, b) => moment.utc(moment(b.endTime, 'HH:mm aa').diff(moment(a.endTime, 'HH:mm aa'))))
+                    .sort(sortDealsByEndDate)
                     .map((deal, index) => {
-                        const cardStyles = [ styles.card ].concat(
-                            moment(deal.endTime, 'HH:mm aa').isBefore(now) ? [ styles.disabled ] : []
-                        );
+                        const cardStyles = [ styles.card ]
+                            .concat(isDealExpired(deal) ? [ baseStyles.disabled ] : []);
 
                         return <Card
                             key={ index }
@@ -94,9 +92,6 @@ const styles = StyleSheet.create({
     card: {
         padding: 0,
         paddingTop: 10
-    },
-    disabled: {
-        opacity: 0.4
     },
     dealContainer: {
         alignItems: 'center',

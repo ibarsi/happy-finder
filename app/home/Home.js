@@ -4,7 +4,7 @@ import { Font } from 'expo';
 
 import Text from '../components/Text';
 import Button from '../components/Button';
-import { COLOURS } from '../styles';
+import { COLOURS } from '../styles/consts';
 
 export default class Home extends React.Component {
     constructor(props) {

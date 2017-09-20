@@ -10,7 +10,7 @@ const ICONS = {
     restaurant: 'md-restaurant'
 };
 
-const EstablishmentListItem = ({ establishment }) => {
+const EstablishmentListItem = ({ establishment, onPress = () => {} }) => {
     if (!establishment) { return null; }
 
     const icon = {
@@ -56,7 +56,8 @@ const EstablishmentListItem = ({ establishment }) => {
         fontFamily={ 'Oswald' }
         leftIcon={ icon }
         chevronColor={ COLOURS.text }
-        badge={ badge } />;
+        badge={ badge }
+        onPress={ onPress } />;
 };
 
 const styles = StyleSheet.create({

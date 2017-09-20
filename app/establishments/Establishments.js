@@ -35,6 +35,12 @@ export default class Establishments extends React.Component {
         });
     }
 
+    _onPress(establishment) {
+        const { navigate } = this.props.navigation;
+
+        navigate('EstablishmentDetails', { establishment });
+    }
+
     render() {
         return <ScrollView
             refreshControl={
@@ -46,7 +52,10 @@ export default class Establishments extends React.Component {
             <List>
                 {
                     this.state.establishments.map((establishment, index) =>
-                        <EstablishmentListItem establishment={ establishment } key={ index } />)
+                        <EstablishmentListItem
+                            establishment={ establishment }
+                            onPress={ this._onPress.bind(this, establishment) }
+                            key={ index } />)
                 }
             </List>
         </ScrollView>;

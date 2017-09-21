@@ -32,8 +32,7 @@ export default class EstablishmentDetails extends React.Component {
 
         return <ScrollView>
             {
-                establishment.deals
-                    .sort(sortDealsByEndDate)
+                sortDealsByEndDate(establishment.deals)
                     .map((deal, index) => {
                         const cardStyles = [ styles.card ]
                             .concat(isDealExpired(deal) ? [ baseStyles.disabled ] : []);

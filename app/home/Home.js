@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import { COLOURS } from '../styles/consts';
 
 export default class Home extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.state = {
@@ -15,7 +15,7 @@ export default class Home extends React.Component {
         };
     }
 
-    async componentDidMount() {
+    async componentDidMount () {
         await Promise.all([
             Font.loadAsync({
                 Oswald: require('../../assets/fonts/Oswald-Regular.ttf'),
@@ -30,15 +30,13 @@ export default class Home extends React.Component {
         });
     }
 
-    render() {
+    render () {
         if (!this.state.loaded) { return null; }
 
         const { navigate } = this.props.navigation;
 
         return <View style={ styles.container }>
-            <Text
-                h1
-                style={ styles.title }>
+            <Text h1>
                 Happy Finder
             </Text>
 
@@ -56,9 +54,6 @@ const styles = StyleSheet.create({
         backgroundColor: COLOURS.background,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    title: {
-        fontFamily: 'Oswald'
     },
     button: {
         marginTop: 20,

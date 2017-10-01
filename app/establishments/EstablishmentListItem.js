@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { isNil } from 'lodash';
 
 import Text from '../components/Text';
 import { COLOURS } from '../styles/consts';
@@ -19,13 +20,14 @@ const EstablishmentListItem = ({ establishment, onPress = () => {} }) => {
         name: ICONS[ establishment.type ]
     };
 
-    const distance = `${ establishment.distance }km`;
+    const distance = !Number.isNaN(establishment.distance) ? `${ establishment.distance.toFixed(2) }km` : undefined;
 
     const dealsSorted = (establishment.deals || []).sort((a, b) => a.price - b.price);
 
     const priceLow = (dealsSorted[ 0 ] || {}).price;
     const priceHigh = (dealsSorted[ dealsSorted.length - 1 ] || {}).price;
     const priceRange = priceHigh === priceLow ? `$${ priceHigh }` : `$${ priceLow } - $${ priceHigh }`;
+    const isPriceAvailable = !isNil(priceLow) && !isNil(priceHigh);
 
     const totalDeals = dealsSorted.length;
 
@@ -42,15 +44,23 @@ const EstablishmentListItem = ({ establishment, onPress = () => {} }) => {
         }
         subtitle={
             <View style={ styles.container }>
-                <Text style={ [ styles.text, styles.priceRange ] }>
-                    { priceRange }
-                </Text>
-                <Text style={ [ styles.text, styles.divider ] }>
-                    |
-                </Text>
-                <Text style={ styles.text }>
-                    { distance }
-                </Text>
+                { isPriceAvailable &&
+                    <Text style={ [ styles.text, styles.priceRange ] }>
+                        { priceRange }
+                    </Text>
+                }
+
+                { isPriceAvailable &&
+                    <Text style={ [ styles.text, styles.divider ] }>
+                        |
+                    </Text>
+                }
+
+                { distance &&
+                    <Text style={ styles.text }>
+                        { distance }
+                    </Text>
+                }
             </View>
         }
         fontFamily={ 'Oswald' }

@@ -17,7 +17,7 @@ export default class EstablishmentDetails extends React.Component {
         title: navigation.state.params.establishment.name
     });
 
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         const { state } = this.props.navigation;
@@ -25,7 +25,7 @@ export default class EstablishmentDetails extends React.Component {
         this.state = state.params;
     }
 
-    render() {
+    render () {
         const { establishment } = this.state;
 
         if (!establishment) { return null; }
@@ -33,55 +33,55 @@ export default class EstablishmentDetails extends React.Component {
         return <ScrollView>
             {
                 sortDealsByEndDate(establishment.deals)
-                    .map((deal, index) => {
-                        const cardStyles = [ styles.card ]
-                            .concat(isDealExpired(deal) ? [ baseStyles.disabled ] : []);
+                .map((deal, index) => {
+                    const cardStyles = [ styles.card ]
+                    .concat(isDealExpired(deal) ? [ baseStyles.disabled ] : []);
 
-                        return <Card
-                            key={ index }
-                            title={ `$${ deal.price }` }
-                            titleStyle={ styles.dealTitle }
-                            containerStyle={ cardStyles }>
-                            { deal.description &&
-                                <Text style={ styles.dealDescription }>
-                                    { deal.description }
+                    return <Card
+                        key={ index }
+                        title={ `$${ deal.price }` }
+                        titleStyle={ styles.dealTitle }
+                        containerStyle={ cardStyles }>
+                        { deal.description &&
+                            <Text style={ styles.dealDescription }>
+                                { deal.description }
+                            </Text>
+                        }
+
+                        { deal.startTime && deal.endTime &&
+                            <View style={ styles.dealContainer }>
+                                <Text>
+                                    { deal.startTime }
                                 </Text>
-                            }
+                                <Text>
+                                    -
+                                </Text>
+                                <Text>
+                                    { deal.endTime }
+                                </Text>
+                            </View>
+                        }
 
-                            { deal.startTime && deal.endTime &&
-                                <View style={ styles.dealContainer }>
-                                    <Text>
-                                        { deal.startTime }
-                                    </Text>
-                                    <Text>
-                                        -
-                                    </Text>
-                                    <Text>
-                                        { deal.endTime }
-                                    </Text>
-                                </View>
-                            }
-
-                            { deal.items &&
-                                deal.items.map((item, itemIndex) =>
-                                    <ListItem
-                                        key={ itemIndex }
-                                        title={
-                                            <Text>
-                                                { item.name }
-                                            </Text>
+                        { deal.items &&
+                            deal.items.map((item, itemIndex) =>
+                                <ListItem
+                                    key={ itemIndex }
+                                    title={
+                                        <Text>
+                                            { item.name }
+                                        </Text>
+                                    }
+                                    leftIcon={
+                                        {
+                                            type: 'ionicon',
+                                            color: COLOURS.text,
+                                            name: ICONS[ item.type ]
                                         }
-                                        leftIcon={
-                                            {
-                                                type: 'ionicon',
-                                                color: COLOURS.text,
-                                                name: ICONS[ item.type ]
-                                            }
-                                        }
-                                        hideChevron={ true } />)
-                            }
-                        </Card>;
-                    })
+                                    }
+                                    hideChevron={ true } />)
+                        }
+                    </Card>;
+                })
             }
         </ScrollView>;
     }

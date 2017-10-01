@@ -13,7 +13,7 @@ export const getEstablishmentsByLocation = async location => {
     try {
         const response = await axios(url);
 
-        return response.data.results;
+        return response.data;
     } catch (error) {
         console.error(error);
 

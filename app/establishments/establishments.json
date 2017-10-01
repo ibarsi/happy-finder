@@ -40,7 +40,6 @@
         "distance": 0.2,
         "deals": [
             {
-                "tags": ["drinks", "food"],
                 "price": 17,
                 "description": "Super cheap burger + pint deal!",
                 "startTime": "4:00PM",

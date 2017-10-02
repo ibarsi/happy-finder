@@ -3,6 +3,18 @@
         "name": "Happy Finder",
         "slug": "happy-finder",
         "sdkVersion": "20.0.0",
-        "privacy": "unlisted"
+        "privacy": "unlisted",
+        "hooks": {
+            "postPublish": [
+                {
+                    "file": "sentry-expo/upload-sourcemaps",
+                    "config": {
+                        "organization": "igor-barsi",
+                        "project": "happy-finder",
+                        "authToken": "4c43ad9bceba4041a265b6b0c9043a90a7793c7e58c249cd92c4e13dd9c66666"
+                    }
+                }
+            ]
+        }
     }
 }

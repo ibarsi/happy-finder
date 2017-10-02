@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// import establishments from './establishments.json';
+import config from '../config';
 
 export const getEstablishmentsByLocation = async location => {
-    const base = 'http://localhost:5000/api/establishments';
+    const base = `${ config.server_url }/api/establishments`;
     const options = [
         `lat=${ location.coords.latitude }`,
         `lng=${ location.coords.longitude }`

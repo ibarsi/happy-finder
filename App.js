@@ -5,8 +5,11 @@ import Home from './app/home/Home';
 import Establishments from './app/establishments/Establishments';
 import EstablishmentDetails from './app/establishments/EstablishmentDetails';
 import config from './app/config';
+import { isProduction } from './app/utils/env';
 
-Sentry.config(config.sentry_dsn).install();
+if (isProduction()) {
+    Sentry.config(config.sentry_url).install();
+}
 
 const App = StackNavigator({
     Home: {

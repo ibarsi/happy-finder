@@ -5,6 +5,7 @@ import { Location, Permissions } from 'expo';
 
 import { getEstablishmentsByLocation } from './establishments.service';
 import EstablishmentListItem from './EstablishmentListItem';
+import LoadingView from '../components/LoadingView';
 import PermissionWrapper from '../components/PermissionWrapper';
 import Text from '../components/Text';
 import { COLOURS } from '../styles/consts';
@@ -29,26 +30,35 @@ class Establishments extends React.Component {
 
         this.state = {
             establishments: [],
-            refreshing: false
+            refreshing: false,
+            initialLoad: true
         };
 
-        this.onRefresh = this._onRefresh.bind(this);
+        this.loadEstablishments = this._loadEstablishments.bind(this);
     }
 
     async componentWillMount () {
-        const establishments = await getEstablishments();
-
-        if (!establishments) { return; }
+        await this.loadEstablishments();
 
         this.setState({
-            establishments
+            initialLoad: false
         });
     }
 
-    async _onRefresh () {
-        this.setState({
-            establishments: await getEstablishments()
-        });
+    async _loadEstablishments () {
+        try {
+            const establishments = await getEstablishments() || [];
+
+            this.setState({
+                establishments
+            });
+        } catch (error) {
+            console.log(error);
+
+            this.setState({
+                establishments: []
+            });
+        }
     }
 
     _onPress (establishment) {
@@ -58,13 +68,15 @@ class Establishments extends React.Component {
     }
 
     render () {
+        if (this.state.initialLoad) { return <LoadingView />; }
+
         return <ScrollView
             style={ !this.state.establishments.length ? styles.scroll : {} }
             contentContainerStyle={ !this.state.establishments.length ? styles.container : {} }
             refreshControl={
                 <RefreshControl
                     refreshing={ this.state.refreshing }
-                    onRefresh={ this.onRefresh } />
+                    onRefresh={ this.loadEstablishments } />
             }>
             { this.state.establishments.length
                 ? <List>

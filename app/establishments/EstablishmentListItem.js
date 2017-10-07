@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { isNil } from 'lodash';
 
+import { getDistanceString } from './establishments.utils';
 import Text from '../components/Text';
 import { COLOURS } from '../styles/consts';
 
@@ -20,7 +21,7 @@ const EstablishmentListItem = ({ establishment, onPress = () => {} }) => {
         name: ICONS[ establishment.type ]
     };
 
-    const distance = !Number.isNaN(establishment.distance) ? `${ establishment.distance.toFixed(2) }km` : undefined;
+    const distance = getDistanceString(establishment.distance);
 
     const dealsSorted = (establishment.deals || []).sort((a, b) => a.price - b.price);
 

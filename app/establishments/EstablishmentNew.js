@@ -1,27 +1,61 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import { merge } from 'lodash';
 
-import Text from '../components/Text';
+import FormInput from '../components/FormInput';
+import { COLOURS } from '../styles/consts';
 
 class EstablishmentNew extends React.Component {
     constructor (props) {
         super(props);
+
+        this.state = {
+            inputs: {
+                name: {
+                    required: true,
+                    isValid: true
+                }
+            }
+        };
+
+        this.validate = this._validate.bind(this);
+    }
+
+    _validate (input, value) {
+        const config = this.state.inputs[ input ];
+
+        const isErronous = config.required && !value;
+
+        this.setState(merge({}, this.state, {
+            inputs: {
+                [ input ]: {
+                    isValid: !isErronous
+                }
+            }
+        }));
     }
 
     render () {
-        return <View style={ styles.container }>
-            <Text h1>
-                { 'NEW ESTABLISHMENT' }
-            </Text>
-        </View>;
+        const { name } = this.state.inputs;
+
+        return <ScrollView
+            style={ styles.scroll }
+            contentContainerStyle={ styles.container }>
+            <FormInput
+                label={ 'Name' }
+                isValid={ name.isValid }
+                onChangeText={ this.validate.bind(this, 'name') } />
+        </ScrollView>;
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    scroll: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: COLOURS.background
+    },
+    container: {
+        marginTop: 20
     }
 });
 

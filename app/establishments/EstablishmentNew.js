@@ -1,7 +1,10 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 import { merge } from 'lodash';
 
+import EstablishmentNewDealModal from './EstablishmentNewDealModal';
+import Text from '../components/Text';
 import FormInput from '../components/FormInput';
 import { COLOURS } from '../styles/consts';
 
@@ -15,10 +18,14 @@ class EstablishmentNew extends React.Component {
                     required: true,
                     isValid: true
                 }
-            }
+            },
+            deals: [],
+            isNewDealModalVisible: false
         };
 
         this.validate = this._validate.bind(this);
+        this.onModalClose = this._onModalClose.bind(this);
+        this.onPressAddNewDeal = this._onPressAddNewDeal.bind(this);
     }
 
     _validate (input, value) {
@@ -35,16 +42,47 @@ class EstablishmentNew extends React.Component {
         }));
     }
 
+    _onPressAddNewDeal () {
+        this.setState({ isNewDealModalVisible: true });
+    }
+
+    _onModalClose () {
+        this.setState({ isNewDealModalVisible: false });
+    }
+
     render () {
         const { name } = this.state.inputs;
 
         return <ScrollView
             style={ styles.scroll }
             contentContainerStyle={ styles.container }>
+            <Text
+                h4
+                style={ styles.title }>
+                New Establishment
+            </Text>
+
             <FormInput
                 label={ 'Name' }
                 isValid={ name.isValid }
                 onChangeText={ this.validate.bind(this, 'name') } />
+
+            <List containerStyle={ styles.list }>
+                <ListItem
+                    title={
+                        <Text>
+                            { 'Add Deal' }
+                        </Text>
+                    }
+                    rightIcon={{ type: 'entypo', name: 'plus' }}
+                    chevronColor={ COLOURS.text }
+                    containerStyle={ styles.list }
+                    onPress={ this.onPressAddNewDeal } />
+            </List>
+
+            <EstablishmentNewDealModal
+                visible={ this.state.isNewDealModalVisible }
+                onClose={ this.onModalClose } />
         </ScrollView>;
     }
 }
@@ -56,6 +94,13 @@ const styles = StyleSheet.create({
     },
     container: {
         marginTop: 20
+    },
+    list: {
+        borderTopColor: COLOURS.text,
+        borderBottomColor: COLOURS.text
+    },
+    title: {
+        paddingLeft: 20
     }
 });
 

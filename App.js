@@ -2,8 +2,7 @@ import { StackNavigator } from 'react-navigation';
 import Sentry from 'sentry-expo';
 
 import Home from './app/home/Home';
-import Establishments from './app/establishments/Establishments';
-import EstablishmentDetails from './app/establishments/EstablishmentDetails';
+import EstablishmentsNavigator from './app/establishments/EstablishmentsNavigator';
 import config from './app/config';
 import { isProduction } from './app/utils/env';
 
@@ -20,14 +19,11 @@ const App = StackNavigator({
         }
     },
     Establishments: {
-        screen: Establishments,
+        screen: EstablishmentsNavigator,
         navigationOptions: {
             title: 'Establishments',
             header: null
         }
-    },
-    EstablishmentDetails: {
-        screen: EstablishmentDetails
     }
 });
 

@@ -3,9 +3,10 @@ import { ScrollView, Modal, StyleSheet } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
-import { merge } from 'lodash';
+import { merge, isNil } from 'lodash';
 
 import Text from '../components/Text';
+import Button from '../components/Button';
 import FormInput from '../components/FormInput';
 import { COLOURS } from '../styles/consts';
 
@@ -13,6 +14,28 @@ const TYPES = [
     'Drink',
     'Food'
 ];
+
+const TIME_FORMAT = 'h:mm A';
+
+const isTimeRangeValid = (startTime, endTime) => {
+    // Can't tell if range is valid until we have both values.
+    if (!startTime || !endTime) { return true; }
+
+    console.log(startTime, endTime);
+
+    return moment(startTime, TIME_FORMAT).isBefore(moment(endTime, TIME_FORMAT));
+};
+
+const isDealReadyToSave = inputs => {
+    return Object.values(inputs)
+    .every(input => {
+        if (input.hasOwnProperty('isValid')) {
+            return input.isValid && !isNil(input.value);
+        }
+
+        return !isNil(input.value);
+    });
+};
 
 export default class EstablishmentNewDealModal extends React.Component {
     constructor (props) {
@@ -51,6 +74,7 @@ export default class EstablishmentNewDealModal extends React.Component {
         this.setValue = this._setValue.bind(this);
         this.setTime = this._setTime.bind(this);
         this.setTimePickerVisibility = this._setTimePickerVisibility.bind(this);
+        this.save = this._save.bind(this);
     }
 
     _validateInput (input, value) {
@@ -59,7 +83,6 @@ export default class EstablishmentNewDealModal extends React.Component {
         const required = !config.required || value;
         const numeric = !config.numeric || !Number.isNaN(Number(value));
         const date = !config.date || moment(value).isValid();
-        // TODO: Date
 
         return [ required, numeric, date ].every(validation => validation);
     }
@@ -76,11 +99,14 @@ export default class EstablishmentNewDealModal extends React.Component {
     }
 
     _setTime (input, value) {
+        const isTimeValid = this.validateInput(input, value) &&
+        isTimeRangeValid(this.state.inputs.startTime.value, this.state.inputs.endTime.value);
+
         this.setState(merge({}, this.state, {
             inputs: {
                 [ input ]: {
-                    isValid: this.validateInput(input, value),
-                    value: moment(value).format('h:mm A'),
+                    isValid: isTimeValid,
+                    value: moment(value).format(TIME_FORMAT),
                     visible: false
                 }
             }
@@ -97,10 +123,19 @@ export default class EstablishmentNewDealModal extends React.Component {
         }));
     }
 
+    _save (inputs) {
+        const deal = {
+            price: inputs.price,
+            description: inputs.description,
+            startTime: inputs.startTime,
+            endTime: inputs.endTime,
+        };
+
+        this.props.onSave(deal);
+    }
+
     render () {
         const { description, type, price, startTime, endTime } = this.state.inputs;
-
-        console.log(this.state.inputs);
 
         return <Modal
             animationType="slide"
@@ -158,6 +193,12 @@ export default class EstablishmentNewDealModal extends React.Component {
                     buttons={ TYPES }
                     selectedIndex={ type.value }
                     onPress={ this.setValue.bind(this, 'type') } />
+
+                <Button
+                    title={ 'ADD' }
+                    onPress={ () => this.save(this.state.inputs) }
+                    buttonStyle={ styles.button }
+                    disabled={ !isDealReadyToSave(this.state.inputs) } />
             </ScrollView>
         </Modal>;
     }
@@ -176,5 +217,9 @@ const styles = StyleSheet.create({
     },
     buttonGroup: {
         marginTop: 20
+    },
+    button: {
+        marginTop: 20,
+        backgroundColor: COLOURS.primary
     }
 });

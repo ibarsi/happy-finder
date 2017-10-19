@@ -26,6 +26,7 @@ class EstablishmentNew extends React.Component {
         this.validate = this._validate.bind(this);
         this.onModalClose = this._onModalClose.bind(this);
         this.onPressAddNewDeal = this._onPressAddNewDeal.bind(this);
+        this.onDealSave = this._onDealSave.bind(this);
     }
 
     _validate (input, value) {
@@ -50,6 +51,13 @@ class EstablishmentNew extends React.Component {
         this.setState({ isNewDealModalVisible: false });
     }
 
+    _onDealSave (deal) {
+        this.setState({
+            deals: this.state.deals.concat([ deal ]),
+            isNewDealModalVisible: false
+        });
+    }
+
     render () {
         const { name } = this.state.inputs;
 
@@ -68,6 +76,19 @@ class EstablishmentNew extends React.Component {
                 onChangeText={ this.validate.bind(this, 'name') } />
 
             <List containerStyle={ styles.list }>
+                {
+                    this.state.deals.map((deal, index) =>
+                        <ListItem
+                            key={ index }
+                            title={
+                                <Text>
+                                    { deal.description }
+                                </Text>
+                            }
+                            hideChevron
+                            containerStyle={ styles.list } />)
+                }
+
                 <ListItem
                     title={
                         <Text>
@@ -82,7 +103,8 @@ class EstablishmentNew extends React.Component {
 
             <EstablishmentNewDealModal
                 visible={ this.state.isNewDealModalVisible }
-                onClose={ this.onModalClose } />
+                onClose={ this.onModalClose }
+                onSave={ this.onDealSave } />
         </ScrollView>;
     }
 }

@@ -1,10 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
 import { merge } from 'lodash';
 
-import EstablishmentNewDealModal from './EstablishmentNewDealModal';
 import Text from '../components/Text';
+import Button from '../components/Button';
 import FormInput from '../components/FormInput';
 import { COLOURS } from '../styles/consts';
 
@@ -18,44 +17,40 @@ class EstablishmentNew extends React.Component {
                     required: true,
                     isValid: true
                 }
-            },
-            deals: [],
-            isNewDealModalVisible: false
+            }
         };
 
-        this.validate = this._validate.bind(this);
-        this.onModalClose = this._onModalClose.bind(this);
-        this.onPressAddNewDeal = this._onPressAddNewDeal.bind(this);
-        this.onDealSave = this._onDealSave.bind(this);
+        this.setValue = this._setValue.bind(this);
+        this.findPlace = this._findPlace.bind(this);
+        this.isInputValid = this._isInputValid.bind(this);
+        this.isFindButtonEnabled = this._isFindButtonEnabled.bind(this);
     }
 
-    _validate (input, value) {
-        const config = this.state.inputs[ input ];
-
-        const isErronous = config.required && !value;
-
+    _setValue (input, value) {
         this.setState(merge({}, this.state, {
             inputs: {
                 [ input ]: {
-                    isValid: !isErronous
+                    isValid: this.isInputValid(input, value),
+                    value
                 }
             }
         }));
     }
 
-    _onPressAddNewDeal () {
-        this.setState({ isNewDealModalVisible: true });
+    _findPlace () {
+        console.log(this.state.inputs.name.value);
     }
 
-    _onModalClose () {
-        this.setState({ isNewDealModalVisible: false });
+    _isInputValid (input, value) {
+        const config = this.state.inputs[ input ];
+
+        const isErronous = config.required && !value;
+
+        return !isErronous;
     }
 
-    _onDealSave (deal) {
-        this.setState({
-            deals: this.state.deals.concat([ deal ]),
-            isNewDealModalVisible: false
-        });
+    _isFindButtonEnabled () {
+        return this.isInputValid('name', this.state.inputs.name.value);
     }
 
     render () {
@@ -73,38 +68,14 @@ class EstablishmentNew extends React.Component {
             <FormInput
                 label={ 'Name' }
                 isValid={ name.isValid }
-                onChangeText={ this.validate.bind(this, 'name') } />
+                onChangeText={ this.setValue.bind(this, 'name') } />
 
-            <List containerStyle={ styles.list }>
-                {
-                    this.state.deals.map((deal, index) =>
-                        <ListItem
-                            key={ index }
-                            title={
-                                <Text>
-                                    { deal.description }
-                                </Text>
-                            }
-                            hideChevron
-                            containerStyle={ styles.list } />)
-                }
-
-                <ListItem
-                    title={
-                        <Text>
-                            { 'Add Deal' }
-                        </Text>
-                    }
-                    rightIcon={{ type: 'entypo', name: 'plus' }}
-                    chevronColor={ COLOURS.text }
-                    containerStyle={ styles.list }
-                    onPress={ this.onPressAddNewDeal } />
-            </List>
-
-            <EstablishmentNewDealModal
-                visible={ this.state.isNewDealModalVisible }
-                onClose={ this.onModalClose }
-                onSave={ this.onDealSave } />
+            <Button
+                title={ 'FIND' }
+                onPress={ this.findPlace }
+                disabled={ !this.isFindButtonEnabled() }
+                buttonStyle={ styles.button }>
+            </Button>
         </ScrollView>;
     }
 }
@@ -117,12 +88,12 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 20
     },
-    list: {
-        borderTopColor: COLOURS.text,
-        borderBottomColor: COLOURS.text
-    },
     title: {
         paddingLeft: 20
+    },
+    button: {
+        marginTop: 20,
+        backgroundColor: COLOURS.primary
     }
 });
 

@@ -74,7 +74,7 @@ class EstablishmentNew extends React.Component {
                 title={ 'FIND' }
                 onPress={ this.findPlace }
                 disabled={ !this.isFindButtonEnabled() }
-                buttonStyle={ styles.button }>
+                style={ styles.button }>
             </Button>
         </ScrollView>;
     }
@@ -92,8 +92,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20
     },
     button: {
-        marginTop: 20,
-        backgroundColor: COLOURS.primary
+        marginTop: 20
     }
 });
 

@@ -43,7 +43,7 @@ export default class Home extends React.Component {
             <Button
                 title={ 'LET\'S GET DRUNK!' }
                 onPress={ () => navigate('Establishments') }
-                buttonStyle={ styles.button } />
+                style={ styles.button } />
         </View>;
     }
 }
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        marginTop: 20,
-        backgroundColor: COLOURS.primary
+        marginTop: 20
     }
 });

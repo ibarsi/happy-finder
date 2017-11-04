@@ -1,13 +1,17 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { Location, Permissions } from 'expo';
 import { merge } from 'lodash';
 
 import Text from '../components/Text';
 import Button from '../components/Button';
 import FormInput from '../components/FormInput';
+import LoadingView from '../components/LoadingView';
+import PermissionWrapper from '../components/PermissionWrapper';
+import { getPlacesByLocation } from '../places/places.service';
 import { COLOURS } from '../styles/consts';
 
-class EstablishmentNew extends React.Component {
+class SuggestionNew extends React.Component {
     constructor (props) {
         super(props);
 
@@ -15,9 +19,11 @@ class EstablishmentNew extends React.Component {
             inputs: {
                 name: {
                     required: true,
-                    isValid: true
-                }
-            }
+                    isValid: true,
+                },
+            },
+            places: [],
+            isLoading: false,
         };
 
         this.setValue = this._setValue.bind(this);
@@ -31,14 +37,25 @@ class EstablishmentNew extends React.Component {
             inputs: {
                 [ input ]: {
                     isValid: this.isInputValid(input, value),
-                    value
-                }
-            }
+                    value,
+                },
+            },
         }));
     }
 
-    _findPlace () {
-        console.log(this.state.inputs.name.value);
+    async _findPlace () {
+        this.setState({
+            isLoading: true,
+        });
+
+        const location = await Location.getCurrentPositionAsync({});
+
+        const places = await getPlacesByLocation(location, this.state.inputs.name.value);
+
+        this.setState({
+            isLoading: false,
+            places,
+        });
     }
 
     _isInputValid (input, value) {
@@ -62,7 +79,7 @@ class EstablishmentNew extends React.Component {
             <Text
                 h4
                 style={ styles.title }>
-                New Establishment
+                New Suggestion
             </Text>
 
             <FormInput
@@ -73,9 +90,13 @@ class EstablishmentNew extends React.Component {
             <Button
                 title={ 'FIND' }
                 onPress={ this.findPlace }
-                disabled={ !this.isFindButtonEnabled() }
+                disabled={ !this.isFindButtonEnabled() || this.state.isLoading }
                 style={ styles.button }>
             </Button>
+
+            { this.state.isLoading &&
+                <LoadingView />
+            }
         </ScrollView>;
     }
 }
@@ -83,17 +104,19 @@ class EstablishmentNew extends React.Component {
 const styles = StyleSheet.create({
     scroll: {
         flex: 1,
-        backgroundColor: COLOURS.background
+        backgroundColor: COLOURS.background,
     },
     container: {
-        marginTop: 20
+        marginTop: 20,
     },
     title: {
-        paddingLeft: 20
+        paddingLeft: 20,
     },
     button: {
-        marginTop: 20
-    }
+        marginTop: 20,
+    },
 });
 
-export default EstablishmentNew;
+const SuggestionNewWrapped = PermissionWrapper(SuggestionNew, Permissions.LOCATION);
+
+export default SuggestionNewWrapped;

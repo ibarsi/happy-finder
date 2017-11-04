@@ -4,7 +4,7 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import Establishments from './Establishments';
 import EstablishmentDetails from './EstablishmentDetails';
-import EstablishmentNew from './EstablishmentNew';
+import SuggestionNew from '../suggestions/SuggestionNew';
 import { COLOURS } from '../styles/consts';
 
 export const TABS = {
@@ -19,7 +19,7 @@ const EstablishmentsListIcon = props =>
         color={ props.tintColor }
         { ...props } />;
 
-const EstablishmentsAddIcon = props =>
+const SuggestionAddIcon = props =>
     <Icon
         type={ 'entypo' }
         name={ 'plus' }
@@ -48,9 +48,9 @@ const EstablishmentsNavigator = TabNavigator(
             }
         },
         Add: {
-            screen: EstablishmentNew,
+            screen: SuggestionNew,
             navigationOptions: {
-                tabBarIcon: EstablishmentsAddIcon,
+                tabBarIcon: SuggestionAddIcon,
             }
         }
     },
